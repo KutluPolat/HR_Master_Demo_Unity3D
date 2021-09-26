@@ -8,6 +8,6 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
-        thisCharacter = new Characters(); // Creates a new character specialities when attached to a GameObject
+        thisCharacter = new Characters(); // Creates a new character specialities
     }
 }
