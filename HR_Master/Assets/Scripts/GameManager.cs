@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Transform characterModelHolder;
     public float applicantsMovementSpeed = 1f;
 
-    private GameObject btn_Restart;
+    private GameObject btn_Restart, bckgrnd_of_OurExpectationsText, bckgrnd_of_ApplicantSpecialitiesText;
     private Expectations _expectations;
     private bool _isGameStarted, _isTheInterviewOngoing, _isApplicantAccepted, _isApplicantRejected, _letApplicantMoveOutsideOfTheRoom;
     private List<GameObject> _spawnedCharacters = new List<GameObject>();
@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SpawnCharacters();
+        bckgrnd_of_OurExpectationsText = GameObject.Find("bckgrnd_OurExpectations");
+        bckgrnd_of_OurExpectationsText.SetActive(false);
+        bckgrnd_of_ApplicantSpecialitiesText = GameObject.Find("bckgrnd_ApplicantsSpecialities");
+        bckgrnd_of_ApplicantSpecialitiesText.SetActive(false);
         btn_Restart = GameObject.Find("RestartButton");
         btn_Restart.SetActive(false);
         applicantsMovementSpeed *= Time.deltaTime;
@@ -58,6 +62,8 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D))
             {
                 _spawnedCharacters[_indexOfTheNextApplicant].GetComponent<Animator>().SetTrigger("accepted");
+                bckgrnd_of_OurExpectationsText.SetActive(false); // Close Backgrounds
+                bckgrnd_of_ApplicantSpecialitiesText.SetActive(false); // Close Backgroundss
                 GameObject.Find("txt_ApplicantsSpecialities").GetComponent<Text>().text = ""; // Delete former applicants specialities.
                 Invoke("LetApplicantMoveOutsideOfTheRoom", 3.367f); // 3.367f = Cheer + Clapping animation length
                 CompareSpecialities(true);
@@ -68,6 +74,8 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.A))
             {
                 _spawnedCharacters[_indexOfTheNextApplicant].GetComponent<Animator>().SetTrigger("rejected");
+                bckgrnd_of_OurExpectationsText.SetActive(false); // Close Backgrounds
+                bckgrnd_of_ApplicantSpecialitiesText.SetActive(false); // Close Backgrounds
                 GameObject.Find("txt_ApplicantsSpecialities").GetComponent<Text>().text = ""; // Delete former applicants specialities.
                 Invoke("LetApplicantMoveOutsideOfTheRoom", 7.083f); // 7.083f = Standing Up + Defeated animation length
                 CompareSpecialities(false);
@@ -88,7 +96,7 @@ public class GameManager : MonoBehaviour
                 {
                     _spawnedCharacters[_indexOfTheNextApplicant].GetComponent<Animator>().SetTrigger("accepted");
                     GameObject.Find("txt_ApplicantsSpecialities").GetComponent<Text>().text = ""; // Delete former applicants specialities.
-                    Invoke("LetApplicantMoveOutsideOfTheRoom", 4.367f); // 4.367f = Cheer + Clapping animation length
+                    Invoke("LetApplicantMoveOutsideOfTheRoom", 3.367f); // 3.367f = Cheer + Clapping animation length
                     CompareSpecialities(true);
                     SetExpectations(); // If we find what we're looking for, reset expectations.
                     _isTheInterviewOngoing = false;
@@ -98,7 +106,7 @@ public class GameManager : MonoBehaviour
                 {
                     _spawnedCharacters[_indexOfTheNextApplicant].GetComponent<Animator>().SetTrigger("rejected");
                     GameObject.Find("txt_ApplicantsSpecialities").GetComponent<Text>().text = ""; // Delete former applicants specialities.
-                    Invoke("LetApplicantMoveOutsideOfTheRoom", 11.566f); // 11.566f = Standing Up + Defeated animation length
+                    Invoke("LetApplicantMoveOutsideOfTheRoom", 7.083f); // 7.083f = Standing Up + Defeated animation length
                     CompareSpecialities(false);
                     _isTheInterviewOngoing = false;
                     _isApplicantRejected = true;
@@ -144,6 +152,8 @@ public class GameManager : MonoBehaviour
 
     private void SetApplicantSpecialitiesText()
     {
+        bckgrnd_of_OurExpectationsText.SetActive(true); // Open Backgrounds
+        bckgrnd_of_ApplicantSpecialitiesText.SetActive(true); // Open Backgrounds
         GameObject.Find("txt_ApplicantsSpecialities").GetComponent<Text>().text =
                 "Here's my CV: \n" +
                 "Department: " + _spawnedCharacters[_indexOfTheNextApplicant].GetComponent<Character>().thisCharacter.character[0].Item1 + "\n" +
@@ -262,6 +272,8 @@ public class GameManager : MonoBehaviour
             _isGameStarted = false;
             Destroy(_spawnedCharacters[_indexOfTheNextApplicant]);
             btn_Restart.SetActive(true);
+            bckgrnd_of_OurExpectationsText.SetActive(false); // Close Backgrounds
+            bckgrnd_of_ApplicantSpecialitiesText.SetActive(false); // Close Backgrounds
             GameObject.Find("txt_GameOver").GetComponent<Text>().text = "Correct desicions: " + _correctDesicionCounter + "\n" + "Wrong desicions: " + _wrongDesicionCounter;
         }
     }
